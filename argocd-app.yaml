@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: web-app
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/aelmizeb/web-app-gitops.git
+    targetRevision: HEAD
+    path: app
+  project: default
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
