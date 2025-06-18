@@ -9,16 +9,18 @@ This project is a simple static web page served through Kubernetes using:
 
 
 
-## 📦 Project Structure
+## 📦 Project Structure (only required files)
 
 ```bash
-- web-app-gitops/
-- ├── manifests/
-- │ ├── deployment.yaml # Web app deployment
-- │ ├── service.yaml # ClusterIP service exposing the app
-- │ └── ingress.yaml # Ingress resource (webapp.local)
-- ├── index.html # Static HTML to serve
-- └── Dockerfile # Image that serves the HTML with Nginx
+web-app-gitops/
+├── app/
+│ ├── deployment.yaml # Web app deployment
+│ ├── service.yaml # ClusterIP service exposing the app
+│ └── ingress.yaml # Ingress resource (webapp.local)
+│
+├── argocd-app.yaml # argocd configs
+├── index.html # Static HTML to serve
+└── Dockerfile # Image that serves the HTML with Nginx
 ```
 
 ## 🚀 Prerequisites
@@ -26,7 +28,7 @@ This project is a simple static web page served through Kubernetes using:
 - [Docker](https://www.docker.com/)
 - [Minikube](https://minikube.sigs.k8s.io/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/)
-- [Argo CD CLI (optional)](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
+- [ArgoCD CLI](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
 
 
 ## 🐳 Build & Push Docker Image
@@ -44,7 +46,7 @@ docker push aelmizeb/web-app:1.0.0
 ```
 
 ## 🧪 Minikube Setup
-you can take a look to this to set up Minikube and Argo CD on a Linux system : https://gist.github.com/aelmizeb/539f12687e551cef17b1fcfd14e19fb9
+you can take a look to this to set up Minikube and ArgoCD on a Linux system : https://gist.github.com/aelmizeb/539f12687e551cef17b1fcfd14e19fb9
 
 ```bash
 # Start Minikube with ingress support
@@ -55,12 +57,12 @@ minikube addons enable ingress
 kubectl get pods -n ingress-nginx
 ```
 
-## ⚙️ Deploy with Argo CD
+## ⚙️ Deploy with ArgoCD
 ```bash
-# Create a namespace for Argo CD
+# Create a namespace for ArgoCD
 kubectl create namespace argocd
 
-# Install Argo CD (non-HA for local)
+# Install ArgoCD (non-HA for local)
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 # Port-forward the ArgoCD UI
@@ -73,7 +75,10 @@ Default credentials:
   ```bash
   argocd admin initial-password -n argocd
   ```
-
+Apply the configuration for ArgoCD
+```bash
+kubectl apply -f argocd-app.yaml -n argocd
+```
 ## 🌐 Access the Web App
 Add to /etc/hosts:
 
@@ -87,9 +92,11 @@ Then open: http://webapp.local
 ```bash
 argocd app delete web-app --cascade
 ```
-This command deletes the Argo CD-managed application named web-app
+This command deletes the ArgoCD managed application named web-app
 
-
+```bash
+minikube delete
+```
 This completely deletes the entire Minikube cluster:
  - Shuts down the Minikube virtual machine or container.
  - Removes all pods, services, Ingresses, volumes, namespaces, configurations, etc.
