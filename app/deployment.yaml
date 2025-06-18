@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: web
-        image: aelmizeb/web-app:1.0.0  # Docker Hub image for the web app
+        image: aelmizeb/web-app:1.0.1  # Docker Hub image for the web app
         ports:
         - containerPort: 80
