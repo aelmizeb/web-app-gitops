@@ -1,4 +1,4 @@
-# Web App GitOps (Minikube + ArgoCD + Ingress)
+# GitOps Demo Web App (Minikube + ArgoCD + Ingress)
 
 This project is a simple static web page served through Kubernetes using:
 
